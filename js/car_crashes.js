@@ -84,12 +84,37 @@ top_panel_var = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1"];
 d3.json("data2.json", plot);
 
 d3.select("#agep0").on("input", function() {
-  update(+this.value);
+  update(+this.value,this.id);
+});
+d3.select("#agep1").on("input", function() {
+  update(+this.value,this.id);
+});
+d3.select("#agep2").on("input", function() {
+  update(+this.value,this.id);
+});
+d3.select("#agep3").on("input", function() {
+  update(+this.value,this.id);
+});
+d3.select("#agep4").on("input", function() {
+  update(+this.value,this.id);
+});
+d3.select("#agep5").on("input", function() {
+  update(+this.value,this.id);
+});
+d3.select("#agep6").on("input", function() {
+  update(+this.value,this.id);
 });
 top_panel_var_age0 = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA"]
 top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1"]
-update(50)
-function update(agep) {
+id = "agep0";
+update(50,"agep0");
+update(50,"agep1");
+update(50,"agep2");
+update(50,"agep3");
+update(50,"agep4");
+update(50,"agep5");
+
+function update(agep,id) {
 	d3.json("data2.json", function(data) {
 			n_pathogens = data.pathogen.length
 			margin = margin_top
@@ -97,7 +122,7 @@ function update(agep) {
 			xlim = [0, 0.1];
 			xscale = d3.scale.linear();
 			xscale.domain(xlim).range(xrange);
-			for (j in top_panel_var) {
+			j=id.substring(id.length,id.length-1);
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
 			xvar_age0 = top_panel_var_age0[j];
 			xvar_age1 = top_panel_var_age1[j];
@@ -105,7 +130,6 @@ function update(agep) {
 			x_age1 = data[xvar_age1];
 			points.duration(750).attr("fill", "#FF3");
 			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);});
-				}
 			})
 }
 
