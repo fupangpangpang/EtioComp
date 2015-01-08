@@ -109,4 +109,37 @@ function update(agep) {
 			})
 }
 
+var width = 600;
+var height = 300;
+ 
+var holder = d3.select("body")
+      .append("svg")
+      .attr("width", width)    
+      .attr("height", height); 
+
+// draw the element
+holder.append("text")
+  .style("fill", "black")
+  .style("font-size", "56px")
+  .attr("dy", ".35em")
+  .attr("text-anchor", "middle")
+  .attr("transform", "translate(300,150) rotate(0)")
+  .text("d3noob.org");
+
+// when the input range changes update value 
+d3.select("#nValue").on("input", function() {
+  updatex(this.value);
+});
+
+// Initial update value 
+updatex(0);
+
+// adjust the text
+function updatex(nValue) {
+
+  // adjust the value
+  holder.select("text") 
+    .attr("transform", "translate(300,150) rotate("+nValue+")");
+}
+
 
