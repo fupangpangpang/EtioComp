@@ -40,7 +40,7 @@ plot = function(data) {
 
   xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
   nxticks = [6, 6, 6, 6, 4, 5];
-  xlab = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1"];
+  xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
   title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA"];
   dotplots = [];
   for (i in top_panel_var) {
@@ -48,7 +48,7 @@ plot = function(data) {
       handle: false
     }).yNA({
       handle: false
-    }).xlim(xlim[i]).ylim([0.5, n_pathogens + 0.5]).yticks(d3.range(n_states).map(function(d) {
+    }).xlim(xlim[i]).ylim([0.5, n_pathogens + 0.5]).yticks(d3.range(n_pathogens).map(function(d) {
       return d + 1;
     })).xlab(xlab[i]).ylab("").pointsize(3).dataByInd(false).xvar(top_panel_var[i]).yvar("rank").title(title[i]);
     dotplots.push(this_dotplot);
@@ -68,14 +68,6 @@ plot = function(data) {
   }).style("font-size", "8pt").style("dominant-baseline", "middle").style("text-anchor", "end").attr("id", function(d, i) {
     return "state" + i;
   }).on("mouseover", highlight_state).on("mouseout", lowlight_state);
-  row = [0, 0, 0, 1, 1, 1];
-  col = [0, 1, 2, 0, 1, 2];
-  lower_xvar = [0, 0, 0, 0, 0, 4];
-  lower_yvar = [1, 2, 3, 4, 5, 5];
-  lower_xlim = [[0, 25], [0, 25], [0, 12], [0, 12], [0, 1500], [0, 200]];
-  scatterplots = [];
-  _results = [];
-  
 };
 
 highlight_state = function(d, i) {
@@ -93,6 +85,18 @@ d3.json("data2.json", plot);
 
 function updateData() {
 	top_panel_var = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA1"];
-	d3.json("data2.json", plot);
-
+	d3.json("data2.json", function(data){
+			margin = margin_top
+		    xrange = [margin.left + margin.inner, margin.left + panelwidth - margin.inner];
+			yrange = [margin.top + panelheight_top - margin.inner, margin.top + margin.inner];
+			xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
+			xscale.domain(xlim).range(xrange);
+			yscale.domain(ylim).range(yrange);
+			xs = d3.scale.linear().domain(xlim).range(xrange);
+			ys = d3.scale.linear().domain(ylim).range(yrange);
+		d3.selectAll("circle").transition().attr("fill", "#FF3");
+		points = g.append("g").attr("id", "points");
+		pointsSelect = points.selectAll("empty").data(d3.range(x.length)).enter().append("circle").attr("cx", function(d, i) {
+        return xscale(x[i]);
+		});
 }
