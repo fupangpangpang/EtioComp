@@ -18,7 +18,7 @@ plot = function(data) {
   panelwidth_top = fullpanelwidth_top - margin_top.left - margin_top.right;
   panelheight_top = htop - margin_top.top - margin_top.bottom;
   statenamewidth = 101;
-  width = statenamewidth + fullpanelwidth_top * 6;
+  width = statenamewidth + fullpanelwidth_top * top_panel_var.length;
   margin_bot = {
     left: 80,
     top: 20,
@@ -38,10 +38,10 @@ plot = function(data) {
   panelheight_bot = fullpanelheight_bot - margin_bot.top - margin_bot.bottom;
   svg = d3.select("div#chart").append("svg").attr("height", height).attr("width", width);
 
-  xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
+  xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
   nxticks = [6, 6, 6, 6, 4, 5];
-  xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
-  title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA"];
+  xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
+  title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
   dotplots = [];
   for (i in top_panel_var) {
     this_dotplot = scatterplot().width(panelwidth_top).height(panelheight_top).margin(margin_top).titlepos(10).xNA({
@@ -80,7 +80,7 @@ lowlight_state = function(d, i) {
   return d3.select("text#state" + i).attr("fill", "black");
 };
 
-top_panel_var = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1"];
+top_panel_var = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"];
 d3.json("data2.json", plot);
 
 d3.select("#agep0").on("input", function() {
@@ -104,15 +104,16 @@ d3.select("#agep5").on("input", function() {
 d3.select("#agep6").on("input", function() {
   update(+this.value,this.id);
 });
-top_panel_var_age0 = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA"]
-top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1"]
+top_panel_var_age0 = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"]
+top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"]
 id = "agep0";
-update(50,"agep0");
-update(50,"agep1");
-update(50,"agep2");
-update(50,"agep3");
-update(50,"agep4");
-update(50,"agep5");
+update(0,"agep0");
+update(0,"agep1");
+update(0,"agep2");
+update(0,"agep3");
+update(0,"agep4");
+update(0,"agep5");
+update(0,"agep6");
 
 function update(agep,id) {
 	d3.json("data2.json", function(data) {
@@ -128,7 +129,7 @@ function update(agep,id) {
 			xvar_age1 = top_panel_var_age1[j];
 			x_age0 = data[xvar_age0];
 			x_age1 = data[xvar_age1];
-			points.duration(750).attr("fill", "#FF3");
+			//points.duration(750).attr("fill", "#FF3");
 			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);});
 			})
 }
