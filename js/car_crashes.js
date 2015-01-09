@@ -128,7 +128,7 @@ function update(agep,id) {
 			xvar_age1 = top_panel_var_age1[j];
 			x_age0 = data[xvar_age0];
 			x_age1 = data[xvar_age1];
-			points.duration(750).attr("fill", "#FF3");
+			//points.duration(750).attr("fill", "#FF3");
 			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);});
 			})
 }
