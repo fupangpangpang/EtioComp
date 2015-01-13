@@ -1,0 +1,16 @@
+{
+    "contents" : "\n# This is the user-interface definition of a Shiny web application.\n# You can find out more about building applications with Shiny here:\n# \n# http://www.rstudio.com/shiny/\n#\n\nlibrary(shiny)\n\nshinyUI(fluidPage(\n  \n  # Application title\n  headerPanel(\"Old Faithful Geyser Data\"),\n  \n  # Sidebar with a slider input for number of bins\n  fluidRow(\n    column(4,\n    sidebarPanel(  \n      sliderInput(\"bins\",\n                  \"Number of bins:\",\n                  min = 0,\n                  max = 100,\n                  value = 50)\n    )\n    ),\n    \n    # Show a plot of the generated distribution\n    column(8,\n    mainPanel(\n      plotOutput(\"distPlot\")\n    )\n    )\n    \n    )\n\n)\n)\n",
+    "created" : 1420490060944.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "555436294",
+    "id" : "DD6B5A3B",
+    "lastKnownWriteTime" : 1420785141,
+    "path" : "C:/Users/WFu/Google Drive/PERCH/2_PQ_MODEL/PQM_Project/EtioComp/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

@@ -1,0 +1,10 @@
+1. To add wiskers as confidence interval
+2. To size up those precise estimate (radius = coefficient K / length of 95% interval)
+3. To add one more characterisitics  - severity // 
+4. To change age slider to bigger slider with three slider. 
+5. To add checkbox to tie up all the input together across sites
+6. To add one more visual to bring all the graphs for each site together - that could be alternative to #5
+7. To add aggregated plot 
+8. To give different reccolor for bacteria//viruses//fungi 
+9. To add exact number and CI to highlight box
+
