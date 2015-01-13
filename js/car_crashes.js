@@ -104,16 +104,16 @@ d3.select("#agep5").on("input", function() {
 d3.select("#agep6").on("input", function() {
   update(+this.value,this.id);
 });
-top_panel_var_age0 = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"]
+top_panel_var_age0 = ["01KEN0", "02GAM0", "03MAL0", "04ZAM0", "05SAF0", "06THA0","07BAN0"]
 top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"]
 id = "agep0";
-update(0,"agep0");
-update(0,"agep1");
-update(0,"agep2");
-update(0,"agep3");
-update(0,"agep4");
-update(0,"agep5");
-update(0,"agep6");
+update(50,"agep0");
+update(50,"agep1");
+update(50,"agep2");
+update(50,"agep3");
+update(50,"agep4");
+update(50,"agep5");
+update(50,"agep6");
 
 function update(agep,id) {
 	d3.json("data2.json", function(data) {
@@ -130,8 +130,10 @@ function update(agep,id) {
 			x_age0 = data[xvar_age0];
 			x_age1 = data[xvar_age1];
 			//points.duration(750).attr("fill", "#FF3");
-			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);});
-			})
-}
+			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
+			}).attr("r",function(d,i) { return 0.1*xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
+			});
+})}
+
 
 
