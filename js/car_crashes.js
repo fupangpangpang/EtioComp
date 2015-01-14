@@ -38,22 +38,11 @@ plot = function(data) {
   panelheight_bot = fullpanelheight_bot - margin_bot.top - margin_bot.bottom;
   svg = d3.select("div#chart").append("svg").attr("height", height).attr("width", width);
 
-<<<<<<< HEAD
   xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
   nxticks = [6, 6, 6, 6, 6, 6];
   xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
   title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
-||||||| merged common ancestors
-  xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
-  nxticks = [6, 6, 6, 6, 4, 5];
-  xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
-  title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA"];
-=======
-  xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
-  nxticks = [6, 6, 6, 6, 4, 5];
-  xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
-  title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
->>>>>>> 6dff6f227c0b3f0fe162241020444ade369ac6a2
+
   dotplots = [];
   for (i in top_panel_var) {
     this_dotplot = scatterplot().width(panelwidth_top).height(panelheight_top).margin(margin_top).titlepos(10).xNA({
@@ -225,10 +214,6 @@ function updateData() {
 			});};
 			
 })}
-			points.duration(750).attr("fill", "#FF3");
-			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);});
-			})
-}
 
 
 
