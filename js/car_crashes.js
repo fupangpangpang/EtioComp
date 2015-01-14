@@ -1,10 +1,10 @@
 
 var highlight_state, lowlight_state, plot;
-var axispos_bot, col, dotplots, fullpanelheight_bot, fullpanelwidth_bot, fullpanelwidth_top, hbot, height, hpos, htop, i, lower_xlim, lower_xvar, lower_yvar, margin_bot, margin_top, n_states, nxticks, panelheight_bot, panelheight_top, panelwidth_bot, panelwidth_top, points, row, scatterplots, state_names, statenamewidth, svg, this_dotplot, this_g, this_scatterplot, title, top_panel_var, vpos, width, xlab, xlim, yscale, _results;
+var combine, axispos_bot, col, dotplots, fullpanelheight_bot, fullpanelwidth_bot, fullpanelwidth_top, hbot, height, hpos, htop, i, lower_xlim, lower_xvar, lower_yvar, margin_bot, margin_top, n_states, nxticks, panelheight_bot, panelheight_top, panelwidth_bot, panelwidth_top, points, row, scatterplots, state_names, statenamewidth, svg, this_dotplot, this_g, this_scatterplot, title, top_panel_var, vpos, width, xlab, xlim, yscale, _results;
 
 plot = function(data) {
     n_pathogens = data.pathogen.length;
-  htop = 530;
+  htop = 700;
   hbot = 500;
   height = htop + hbot;
   margin_top = {
@@ -84,45 +84,149 @@ top_panel_var = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07B
 d3.json("data2.json", plot);
 
 d3.select("#agep0").on("input", function() {
-  update(+this.value,this.id);
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  
 });
 d3.select("#agep1").on("input", function() {
-  update(+this.value,this.id);
-});
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  });
 d3.select("#agep2").on("input", function() {
-  update(+this.value,this.id);
-});
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  });
 d3.select("#agep3").on("input", function() {
-  update(+this.value,this.id);
-});
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  });
 d3.select("#agep4").on("input", function() {
-  update(+this.value,this.id);
-});
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  });
 d3.select("#agep5").on("input", function() {
-  update(+this.value,this.id);
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  
 });
 d3.select("#agep6").on("input", function() {
-  update(+this.value,this.id);
+
+  if (combine) {
+    update(+this.value,"agep0");
+	update(+this.value,"agep1");
+	update(+this.value,"agep2");
+	update(+this.value,"agep3");
+	update(+this.value,"agep4");
+	update(+this.value,"agep5");
+	update(+this.value,"agep6");
+  } else {
+    update(+this.value,this.id);
+  }
+  
+
+});
+d3.select("#option2").on("change", function() {
+  if (this.checked){
+	combine= true;
+  } else {
+	combine= false;
+  };
 });
 top_panel_var_age0 = ["01KEN0", "02GAM0", "03MAL0", "04ZAM0", "05SAF0", "06THA0","07BAN0"]
 top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"]
-id = "agep0";
 update(30,"agep0");
 update(35,"agep1");
 update(50,"agep2");
 update(25,"agep3");
 update(60,"agep4");
 update(25,"agep5");
-update(45,"agep6");
+update(80,"agep6");
 
+var statOptions = {
+    "Points": "PTS",
+    "Goals": "G",
+    "Assists": "A",
+    "Penalty Minutes": "PIM"
+};
+ selectUI = d3.select("div#chart").append("form").append("select");
+
+// create the options
+selectUI.selectAll("option").data(d3.keys(statOptions)).enter().append("option").text(function(d) {
+    return d;
+});
+
+
+var updatenot = false;
 function update(agep,id) {
 	d3.json("data2.json", function(data) {
-			n_pathogens = data.pathogen.length
-			margin = margin_top
-		    xrange = [margin.left + margin.inner, margin.left + panelwidth_top - margin.inner];
+			n_pathogens = data.pathogen.length;
+			margin = margin_top;
+			xrange = [margin.left + margin.inner, margin.left + panelwidth_top - margin.inner];
+
+			if (updatenot) {
+		    xrange_new = [margin.left + margin.inner, margin.left + panelwidth_top*6.5 - margin.inner];
+			} else {
+		    xrange_new = xrange;
+			}
 			xlim = [0, 0.1];
 			xscale = d3.scale.linear();
 			xscale.domain(xlim).range(xrange);
+			xscale_new = d3.scale.linear();
+			xscale_new.domain(xlim).range(xrange_new);
 			j=id.substring(id.length,id.length-1);
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
 			xvar_age0 = top_panel_var_age0[j];
@@ -130,16 +234,22 @@ function update(agep,id) {
 			x_age0 = data[xvar_age0];
 			x_age1 = data[xvar_age1];
 			//points.duration(750).attr("fill", "#FF3");
-			points.duration(750).attr("cx", function(d,i) { return xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
-			}).attr("r",function(d,i) { return 0.1*xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
+			points.duration(750).attr("cx", function(d,i) { return xscale_new((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
+			}).attr("r",function(d,i) { return 0.12*xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
 			});
-})};
+
+});
+			document.getElementById(id).value=agep;
+			};
+
 
 function updateData() {
-	color = ["red","brown","yellow","green","blue","purple"];
+	updatenot = true;
+
+	color = ["red","brown","yellow","green","Teal","blue","purple"];
 	d3.json("data2.json", function(data) {
-			n_pathogens = data.pathogen.length
-			margin = margin_top
+			n_pathogens = data.pathogen.length;
+			margin = margin_top;
 		    xrange = [margin.left + margin.inner, margin.left + panelwidth_top - margin.inner];
 			xlim = [0, 0.1];
 			xscale = d3.scale.linear();
@@ -158,10 +268,10 @@ function updateData() {
 				xaxis = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis").transition();
 				xaxis.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 				title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
-				title.select("text").duration(1000).style("fill", color[j-1]);
+				title.select("text").duration(1000).style("fill", color[j]);
 				title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
 				points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
-				points.duration(1000).attr("fill", color[j-1]);
+				points.duration(1000).attr("fill", color[j]);
 				d3.selectAll("g#dotplot"+j).transition().duration(1000).delay(1000).attr("transform", "translate(" + (statenamewidth) + ",0) scale(1,1) rotate(0)");
 				//d3.selectAll("div#compinput").remove();
 			};
@@ -182,6 +292,10 @@ function updateData() {
 			d3.select("div#compinput6").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","285px");			
 			j=0;
 			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
+			title.select("text").duration(1000).style("fill", color[j]);
+			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
+			points.duration(1000).attr("fill", color[j]);
+			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
 			title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
 			//rect.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g#dotplot"+j).selectAll("g.title").attr("transform", "translate(0,0) scale(0,1) rotate(0)");
@@ -197,19 +311,44 @@ function updateData() {
 				if (i<6) {return xscale_new(xticks[i]);} 
 				else {return margin.left + panelwidth_top*7/2}
 				} );
-			yline = d3.selectAll("g#dotplot"+j).selectAll("g.y.axis line").transition().duration(1000).delay(2000).attr("x2", function(d,i){ return xscale_new(margin.left + panelwidth_top*7)});	 
+			yline = d3.selectAll("g#dotplot"+j).selectAll("g.y.axis line").transition().duration(1000).delay(2000).attr("x2", function(d,i){ return xscale_new(margin.left + panelwidth_top*7)});	
+			//d3.selectAll("g.dotplot g.y.axis line").transition().delay(2000).attr("stroke", "#bbb")			
 
-			
+			agep = [+document.getElementById("agep0").value,+document.getElementById("agep1").value,+document.getElementById("agep2").value,+document.getElementById("agep3").value,+document.getElementById("agep4").value,+document.getElementById("agep5").value,+document.getElementById("agep6").value]
 			for (k = 0; k < 7; k++) { 
 				points = d3.selectAll("g#dotplot"+k).selectAll("circle").moveToFront().transition();
 				xvar_age0 = top_panel_var_age0[k];
 				xvar_age1 = top_panel_var_age1[k];
 				x_age0 = data[xvar_age0];
 				x_age1 = data[xvar_age1];
-				points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((50 * x_age1[i] + (100-50) * x_age0[i])/100);
-			}).attr("r",function(d,i) { return 0.12*xscale((50 * x_age1[i] + (100-50) * x_age0[i])/100);
+				points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((agep[k] * x_age1[i] + (100-agep[k]) * x_age0[i])/100);
+			}).attr("r",function(d,i) { return 0.12*xscale((agep[k] * x_age1[i] + (100-agep[k]) * x_age0[i])/100);
 			});};
-			
+
 })}
+
+function highlight_site(j) {
+	array = [0,1,2,3,4,5,6];
+  d3.select("g#dotplot"+j).selectAll("circle").attr("stroke-width", "3").moveToFront();
+  array_new = removeA(array,j);
+  for (i in array_new) {
+  d3.select("g#dotplot"+array_new[i] ).selectAll("circle").attr("fill", "grey");
+  }
+};
+function lowlight_site(j) {
+  d3.select("g#dotplot"+j).selectAll("circle").attr("stroke-width", "3").moveToFront();
+};
+
+function removeA(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+
 
 
