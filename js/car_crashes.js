@@ -39,7 +39,7 @@ plot = function(data) {
   svg = d3.select("div#chart").append("svg").attr("height", height).attr("width", width);
 
   xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
-  nxticks = [6, 6, 6, 6, 4, 5];
+  nxticks = [6, 6, 6, 6, 6, 6];
   xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
   title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
   dotplots = [];
@@ -107,13 +107,13 @@ d3.select("#agep6").on("input", function() {
 top_panel_var_age0 = ["01KEN0", "02GAM0", "03MAL0", "04ZAM0", "05SAF0", "06THA0","07BAN0"]
 top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"]
 id = "agep0";
-update(50,"agep0");
-update(50,"agep1");
+update(30,"agep0");
+update(35,"agep1");
 update(50,"agep2");
-update(50,"agep3");
-update(50,"agep4");
-update(50,"agep5");
-update(50,"agep6");
+update(25,"agep3");
+update(60,"agep4");
+update(25,"agep5");
+update(45,"agep6");
 
 function update(agep,id) {
 	d3.json("data2.json", function(data) {
@@ -144,6 +144,12 @@ function updateData() {
 			xlim = [0, 0.1];
 			xscale = d3.scale.linear();
 			xscale.domain(xlim).range(xrange);
+			
+			xrange_new = [margin.left + margin.inner, margin.left + panelwidth_top*6.5 - margin.inner]
+			xscale_new = d3.scale.linear();
+			xscale_new.domain(xlim).range(xrange_new);
+			
+			title_y = [35,65,95,125,155,185,215];
 			for (j = 1; j < 7; j++) { 
 				rect = d3.selectAll("g#dotplot"+j).selectAll("rect").transition();
 				rect.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
@@ -151,31 +157,57 @@ function updateData() {
 				yaxis.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 				xaxis = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis").transition();
 				xaxis.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
-				title = d3.selectAll("g#dotplot"+j).selectAll("g.title");
-				title.attr("transform", "translate(0,0) scale(0,1) rotate(0)");
+				title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
+				title.select("text").duration(1000).style("fill", color[j-1]);
+				title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
 				points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
-				points.duration(750).attr("fill", color[j-1]);
+				points.duration(1000).attr("fill", color[j-1]);
 				d3.selectAll("g#dotplot"+j).transition().duration(1000).delay(1000).attr("transform", "translate(" + (statenamewidth) + ",0) scale(1,1) rotate(0)");
-				d3.selectAll("div#compinput").remove();
+				//d3.selectAll("div#compinput").remove();
 			};
+			//relocate input box
+			d3.select("div#compinput0").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","100px");
+			d3.select("div#compinput0").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","105px");
+			d3.select("div#compinput1").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","130px");
+			d3.select("div#compinput1").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","135px");			
+			d3.select("div#compinput2").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","160px");
+			d3.select("div#compinput2").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","165px");	
+			d3.select("div#compinput3").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","190px");
+			d3.select("div#compinput3").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","195px");
+			d3.select("div#compinput4").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","220px");
+			d3.select("div#compinput4").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","225px");
+			d3.select("div#compinput5").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","250px");
+			d3.select("div#compinput5").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","255px");	
+			d3.select("div#compinput6").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","280px");
+			d3.select("div#compinput6").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","285px");			
 			j=0;
-			rect = d3.selectAll("g#dotplot"+j).selectAll("rect").transition();
-			rect.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
+			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
+			title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
+			//rect.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g#dotplot"+j).selectAll("g.title").attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g.dotplot svg").attr("width", panelwidth_top*8);
 			rect = d3.selectAll("g#dotplot"+j).selectAll("rect").transition();
-			rect.duration(1000).delay(2000).attr("width", panelwidth_top*7);
-			xrange_new = [margin.left + margin.inner, margin.left + panelwidth_top*7 - margin.inner]
-			xscale_new = d3.scale.linear();
-			xscale_new.domain(xlim).range(xrange_new);
+			rect.duration(1000).delay(2000).attr("width", panelwidth_top*6.5);
+			//x y axis
+			nxticks = 6;
+			height = 530;
+			xticks= Array.apply(0, Array(nxticks)).map(function (x, y) { return (0.1*y/(nxticks-1)); });
+			xline = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis line").transition().duration(1000).delay(2000).attr("x1", function(d,i){ return xscale_new(xticks[i])}).attr("x2", function(d,i){ return xscale_new(xticks[i])});
+			xtext = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis text").transition().duration(1000).delay(2000).attr("x", function(d,i){ 
+				if (i<6) {return xscale_new(xticks[i]);} 
+				else {return margin.left + panelwidth_top*7/2}
+				} );
+			yline = d3.selectAll("g#dotplot"+j).selectAll("g.y.axis line").transition().duration(1000).delay(2000).attr("x2", function(d,i){ return xscale_new(margin.left + panelwidth_top*7)});	 
+
+			
 			for (k = 0; k < 7; k++) { 
 				points = d3.selectAll("g#dotplot"+k).selectAll("circle").moveToFront().transition();
 				xvar_age0 = top_panel_var_age0[k];
 				xvar_age1 = top_panel_var_age1[k];
 				x_age0 = data[xvar_age0];
 				x_age1 = data[xvar_age1];
-				points.duration(750).delay(3000).attr("cx", function(d,i) { return xscale_new((50 * x_age1[i] + (100-50) * x_age0[i])/100);
-			}).attr("r",function(d,i) { return 0.1*xscale((50 * x_age1[i] + (100-50) * x_age0[i])/100);
+				points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((50 * x_age1[i] + (100-50) * x_age0[i])/100);
+			}).attr("r",function(d,i) { return 0.12*xscale((50 * x_age1[i] + (100-50) * x_age0[i])/100);
 			});};
 			
 })}
