@@ -71,12 +71,20 @@ plot = function(data) {
 };
 
 highlight_state = function(d, i) {
-  d3.selectAll("circle.pt" + i).attr("stroke-width", "3").moveToFront();
+  for (j=0;j<7;j++) {
+	if (highlight_ind[j]){
+	  d3.selectAll("g#dotplot"+j).selectAll("circle").attr("opacity",0.2);
+	   d3.selectAll("g#dotplot"+j).selectAll("circle.pt" + i).attr("stroke-width", "3").attr("opacity",1).moveToFront();
+	};
+  };
   return d3.select("text#state" + i).attr("fill", "violetred");
 };
 
 lowlight_state = function(d, i) {
-  d3.selectAll("circle.pt" + i).attr("stroke-width", "1").moveToBack();
+  for (j=0;j<7;j++) {
+	if (highlight_ind[j]){
+	d3.selectAll("g#dotplot"+j).selectAll("circle").attr("opacity",1).attr("stroke-width", "1").moveToBack();
+  };};
   return d3.select("text#state" + i).attr("fill", "black");
 };
 
@@ -268,7 +276,7 @@ function updateData() {
 				xaxis = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis").transition();
 				xaxis.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 				title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
-				title.select("text").duration(1000).style("fill", color[j]);
+				title.select("text").duration(1000).style("fill", color[j]).style("cursor","pointer");
 				title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
 				points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
 				points.duration(1000).attr("fill", color[j]);
@@ -292,11 +300,21 @@ function updateData() {
 			d3.select("div#compinput6").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","285px");			
 			j=0;
 			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
-			title.select("text").duration(1000).style("fill", color[j]);
+			title.select("text").duration(1000).style("fill", color[j]).style("cursor","pointer");
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
 			points.duration(1000).attr("fill", color[j]);
 			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
 			title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
+			
+			//highlight site
+			 title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
+			
+			for (i=0;i<7;i++) {
+				d3.selectAll("g#dotplot"+i).selectAll("g.title").data([i]).on("click", highlight_site);
+			};
+			//create button;
+
+			
 			//rect.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g#dotplot"+j).selectAll("g.title").attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g.dotplot svg").attr("width", panelwidth_top*8);
@@ -311,7 +329,7 @@ function updateData() {
 				if (i<6) {return xscale_new(xticks[i]);} 
 				else {return margin.left + panelwidth_top*7/2}
 				} );
-			yline = d3.selectAll("g#dotplot"+j).selectAll("g.y.axis line").transition().duration(1000).delay(2000).attr("x2", function(d,i){ return xscale_new(margin.left + panelwidth_top*7)});	
+			yline = d3.selectAll("g#dotplot"+j).selectAll("g.y.axis line").transition().duration(1000).delay(2000).attr("x2", function(d,i){ return margin.left + panelwidth_top*6.5});	
 			//d3.selectAll("g.dotplot g.y.axis line").transition().delay(2000).attr("stroke", "#bbb")			
 
 			agep = [+document.getElementById("agep0").value,+document.getElementById("agep1").value,+document.getElementById("agep2").value,+document.getElementById("agep3").value,+document.getElementById("agep4").value,+document.getElementById("agep5").value,+document.getElementById("agep6").value]
@@ -326,17 +344,18 @@ function updateData() {
 			});};
 
 })}
-
-function highlight_site(j) {
-	array = [0,1,2,3,4,5,6];
-  d3.select("g#dotplot"+j).selectAll("circle").attr("stroke-width", "3").moveToFront();
-  array_new = removeA(array,j);
-  for (i in array_new) {
-  d3.select("g#dotplot"+array_new[i] ).selectAll("circle").attr("fill", "grey");
-  }
-};
-function lowlight_site(j) {
-  d3.select("g#dotplot"+j).selectAll("circle").attr("stroke-width", "3").moveToFront();
+highlight_ind = [true,true,true,true,true,true,true];
+highlight_site=function(d,i) {
+  if (highlight_ind[d]){
+  d3.selectAll("g#dotplot"+d).selectAll("circle").attr("opacity",0.2);
+  highlight_ind[d]=false;
+  d3.selectAll("g#dotplot"+d).selectAll("g.title").select("text").attr("opacity",0.2);
+}  else {
+	d3.selectAll("g#dotplot"+d).selectAll("circle").attr("opacity",1).moveToFront();
+  highlight_ind[d]=true;
+    d3.selectAll("g#dotplot"+d).selectAll("g.title").select("text").attr("opacity",1);
+}
+  
 };
 
 function removeA(arr) {
@@ -350,5 +369,5 @@ function removeA(arr) {
     return arr;
 }
 
-
+document.createElement("BUTTON");
 
