@@ -7,6 +7,7 @@ dir_list = c("01KEN_CXR_AGE_0","01KEN_CXR_AGE_1","02GAM_CXR_AGE_0","02GAM_CXR_AG
 dir_list1 = substr(dir_list,3,15)
 dir_list2 = substr(dir_list,1,5)
 json.prep = list()
+json.prep.raw = list()
 for (j in seq_along(dir_list)) {
   DIR_NPLCM = paste0("C:\\Users\\WFu\\Dropbox (PERCH)\\PQM EXPERIMENT DATASETS\\ARCHIVE\\PQM_RESULTS_20141122\\",dir_list2[j],"\\",dir_list[j])
   
@@ -45,10 +46,38 @@ for (j in seq_along(dir_list)) {
     colnames(path.df)=pathogen_list[[i]]
     res.ggplots = rbind.fill(path.df,res.ggplots)[-1,]
   }
-  json.prep[[j]] <- as.array(colMeans(res.ggplots))
+  json.prep[[j]] <- as.array(colMeans(res.ggplots))[order]
   row.names(json.prep[[j]])=NULL
-  
+  json.prep.raw[[j]] = res.ggplots
 }
+
+CI_list = list()
+## Prepare 2.5% and 97.5% for 101 scenario
+site = c("KEN","GAM","MAL","ZAM","SAF","THA","BAN")
+for (s in c(0:6)) {
+  CI_list[[s+1]] = list()
+  for (w in c(0:100)){
+    CI_list[[s+1]][[w+1]] = list()
+
+    result_w = (json.prep.raw[[2*s+1]]*w+json.prep.raw[[2*s+2]]*(100-w))/100
+    res_w_2.5= as.array(apply(result_w, 2, function(x) quantile(x, .025)))[order]
+    res_w_97.5= as.array(apply(result_w, 2, function(x) quantile(x, .975)))[order]
+    res_w_50= as.array(apply(result_w, 2, function(x) quantile(x, .50)))[order]
+    dist = res_w_97.5-res_w_50
+    row.names(res_w_2.5)=NULL
+    row.names(res_w_97.5)=NULL
+    row.names(dist)=NULL
+
+    CI_list[[s+1]][[w+1]][[1]]=res_w_2.5
+    CI_list[[s+1]][[w+1]][[2]]=res_w_97.5
+    CI_list[[s+1]][[w+1]][[3]]=dist
+    names( CI_list[[s+1]][[w+1]])=c("p025","p975","dist")
+  }
+  names(CI_list[[s+1]])=paste("W",c(0:100),sep="")
+}
+names(CI_list)=site
+
+
 
 
 # a function to match each model's result to the desired order:
@@ -80,16 +109,21 @@ order_new = 33-lookup(pathogen_list,newlist)[[1]]
 
 ###
 n=length(dir_list)
-json.prep[[n+1]] = pathogen_list
-json.prep[[n+2]] = pathogen_list
-json.prep[[n+3]] = order_new
+json.prep[[n+1]] = newlist
+json.prep[[n+2]] = newlist
+json.prep[[n+3]] = c(32:1)
 json.prep[[n+4]] = dir_list1
 dir_list1[n+1]= "pathogen"
 dir_list1[n+2]= "abbrev"
 dir_list1[n+3]= "rank"
 dir_list1[[n+4]] = "rawlist"
 names(json.prep)= dir_list1
-request.body <- toJSON(json.prep)
+
+
+json.prep.new = c(json.prep,CI_list)
+
+
+request.body <- toJSON(json.prep.new)
 sink("C:\\Users\\WFu\\Google Drive\\PERCH\\2_PQ_MODEL\\PQM_Project\\EtioComp\\perchdata.json")
 cat(request.body)
 sink()

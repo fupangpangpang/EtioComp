@@ -196,6 +196,19 @@ d3.select("#option2").on("change", function() {
 });
 top_panel_var_age0 = ["KEN_CXR_AGE_0","GAM_CXR_AGE_0","MAL_CXR_AGE_0","ZAM_CXR_AGE_0","SAF_CXR_AGE_0","THA_CXR_AGE_0","BAN_CXR_AGE_0"];
 top_panel_var_age1 = ["KEN_CXR_AGE_1","GAM_CXR_AGE_1","MAL_CXR_AGE_1","ZAM_CXR_AGE_1","SAF_CXR_AGE_1","THA_CXR_AGE_1","BAN_CXR_AGE_1"];
+site = ["KEN","GAM","MAL","ZAM","SAF","THA","BAN"];
+Wlist=["W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", 
+"W10", "W11", "W12", "W13", "W14", "W15", "W16", "W17", "W18", 
+"W19", "W20", "W21", "W22", "W23", "W24", "W25", "W26", "W27", 
+"W28", "W29", "W30", "W31", "W32", "W33", "W34", "W35", "W36", 
+"W37", "W38", "W39", "W40", "W41", "W42", "W43", "W44", "W45", 
+"W46", "W47", "W48", "W49", "W50", "W51", "W52", "W53", "W54", 
+"W55", "W56", "W57", "W58", "W59", "W60", "W61", "W62", "W63", 
+"W64", "W65", "W66", "W67", "W68", "W69", "W70", "W71", "W72", 
+"W73", "W74", "W75", "W76", "W77", "W78", "W79", "W80", "W81", 
+"W82", "W83", "W84", "W85", "W86", "W87", "W88", "W89", "W90", 
+"W91", "W92", "W93", "W94", "W95", "W96", "W97", "W98", "W99", 
+"W100"];
 update(30,"agep0");
 update(35,"agep1");
 update(50,"agep2");
@@ -217,8 +230,7 @@ selectUI.selectAll("option").data(d3.keys(statOptions)).enter().append("option")
     return d;
 });
 
-
-var updatenot = false;
+updatenot=false;
 function update(agep,id) {
 	d3.json("perchdata.json", function(data) {
 			n_pathogens = data.pathogen.length;
@@ -236,14 +248,19 @@ function update(agep,id) {
 			xscale_new = d3.scale.linear();
 			xscale_new.domain(xlim).range(xrange_new);
 			j=id.substring(id.length,id.length-1);
+			k=j+1;
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
 			xvar_age0 = top_panel_var_age0[j];
 			xvar_age1 = top_panel_var_age1[j];
+			xvar_site = site[j];
+			Wid = Wlist[agep];
 			x_age0 = data[xvar_age0];
 			x_age1 = data[xvar_age1];
+			x_site = data[xvar_site];
+			x_W = x_site[Wid];
 			//points.duration(750).attr("fill", "#FF3");
 			points.duration(750).attr("cx", function(d,i) { return xscale_new((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
-			}).attr("r",function(d,i) { return 5;
+			}).attr("r",function(d,i) { return 0.04*(180-xscale(x_W.dist[i])); 
 			});
 
 });
