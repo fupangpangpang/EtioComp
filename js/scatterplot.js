@@ -220,7 +220,18 @@ scatterplot = function() {
         return indID[i];
       }).direction('e').offset([0, 10]);
       svg.call(indtip);
-      points = g.append("g").attr("id", "points");
+	  
+      ciline = g.append("g").attr("class", "ciline");
+      ciline.selectAll("empty").data(yticks.reverse()).enter().append("line").attr("y1", function(d) {
+        return yscale(d);
+      }).attr("y2", function(d) {
+        return yscale(d);
+      }).attr("class", function(d, i) {
+        return "pt" + i;
+      }).attr("x1", margin.left).attr("x2", margin.left + width).attr("fill", "none").attr("stroke", "black").attr("stroke-width", 1).style("pointer-events", "none");
+  
+	  
+	  points = g.append("g").attr("id", "points");
       pointsSelect = points.selectAll("empty").data(d3.range(x.length)).enter().append("circle").attr("cx", function(d, i) {
         return xscale(x[i]);
       }).attr("cy", function(d, i) {
