@@ -74,7 +74,9 @@ highlight_state = function(d, i) {
   for (j=0;j<7;j++) {
 	if (highlight_ind[j]){
 	  d3.selectAll("g#dotplot"+j).selectAll("circle").attr("opacity",0.2);
+	   d3.selectAll("g#dotplot"+j).selectAll("g.ciline").selectAll("line").attr("opacity",0.2);
 	   d3.selectAll("g#dotplot"+j).selectAll("circle.pt" + i).attr("stroke-width", "3").attr("opacity",1).moveToFront();
+	   d3.selectAll("g#dotplot"+j).selectAll("g.ciline").selectAll("line.pt"+ i).attr("opacity",1).moveToFront();
 	};
   };
   return d3.select("text#state" + i).attr("fill", "violetred");
@@ -84,6 +86,8 @@ lowlight_state = function(d, i) {
   for (j=0;j<7;j++) {
 	if (highlight_ind[j]){
 	d3.selectAll("g#dotplot"+j).selectAll("circle").attr("opacity",1).attr("stroke-width", "1").moveToBack();
+	d3.selectAll("g#dotplot"+j).selectAll("g.ciline").selectAll("line").attr("opacity",1).moveToBack();
+
   };};
   return d3.select("text#state" + i).attr("fill", "black");
 };
@@ -198,13 +202,13 @@ top_panel_var_age0 = ["KEN_CXR_AGE_0","GAM_CXR_AGE_0","MAL_CXR_AGE_0","ZAM_CXR_A
 top_panel_var_age1 = ["KEN_CXR_AGE_1","GAM_CXR_AGE_1","MAL_CXR_AGE_1","ZAM_CXR_AGE_1","SAF_CXR_AGE_1","THA_CXR_AGE_1","BAN_CXR_AGE_1"];
 site = ["KEN","GAM","MAL","ZAM","SAF","THA","BAN"];
 
-update(30,"agep0");
-update(35,"agep1");
-update(50,"agep2");
-update(25,"agep3");
-update(60,"agep4");
-update(25,"agep5");
-update(80,"agep6");
+update(53,"agep0");
+update(63,"agep1");
+update(68,"agep2");
+update(77,"agep3");
+update(74,"agep4");
+update(49,"agep5");
+update(39,"agep6");
 
 var statOptions = {
     "Points": "PTS",
@@ -238,15 +242,16 @@ function update(agep,id) {
 			xscale_new.domain(xlim).range(xrange_new);
 			j=id.substring(id.length,id.length-1);
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
+			ciline = d3.selectAll("g#dotplot"+j).selectAll("g.ciline").selectAll("line").transition();
 			xvar_site = site[j];
 			Wid = "W"+agep;
 			x_site = data[xvar_site];
 			x_W = x_site[Wid];
 			//points.duration(750).attr("fill", "#FF3");
-			points.duration(750).attr("cx", function(d,i) { return xscale_new((x_W.mean[i]));})
-			.attr("r",function(d,i) { return 100/xscale(x_W.sd[i]); 
-			});
-
+			points.duration(750).attr("cx", function(data1,index1) { return xscale_new((x_W.mean[index1]));})
+			.attr("r",function(data1,index1) { return 1/Math.pow(x_W.sd[index1],1/3);});
+			ciline.duration(750).attr("x1", function(data2,index2) { return xscale_new((x_W.p025[index2]));})
+			.attr("x2",function(data2,index2) { return xscale_new(x_W.p975[index2]);});
 });
 			document.getElementById(id).value=agep;
 			};
@@ -263,7 +268,7 @@ function zoomed() {
 function updateData() {
 	updatenot = true;
 
-	color = ["red","brown","yellow","green","Teal","blue","purple"];
+	color = ['rgb(228,26,28)','rgb(55,126,184)','rgb(77,175,74)','rgb(152,78,163)','rgb(255,127,0)','rgb(255,255,51)','rgb(166,86,40)'];
 	d3.json("perchdata.json", function(data) {
 			n_pathogens = data.pathogen.length;
 			margin = margin_top;
@@ -351,9 +356,10 @@ function updateData() {
 			x_site = data[xvar_site];
 			x_W = x_site[Wid];
 			points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((x_W.mean[i]));})
-			.attr("r",function(d,i) { return 100/xscale(x_W.sd[i]);
-			});
-			
+			.attr("r",function(d,i) { return 1/Math.pow(x_W.sd[i],1/3);});
+			ciline = d3.selectAll("g#dotplot"+k).selectAll("g.ciline").selectAll("line").transition();
+			ciline.duration(750).delay(2000).attr("x1", function(data2,index2) { return xscale_new((x_W.p025[index2]));})
+			.attr("x2",function(data2,index2) { return xscale_new(x_W.p975[index2]);});			
 			};
 
 })}
@@ -363,10 +369,13 @@ highlight_site=function(d,i) {
   d3.selectAll("g#dotplot"+d).selectAll("circle").attr("opacity",0.2);
   highlight_ind[d]=false;
   d3.selectAll("g#dotplot"+d).selectAll("g.title").select("text").attr("opacity",0.2);
+  d3.selectAll("g#dotplot"+d).selectAll("g.ciline").selectAll("line").attr("opacity",0.2);
 }  else {
 	d3.selectAll("g#dotplot"+d).selectAll("circle").attr("opacity",1).moveToFront();
   highlight_ind[d]=true;
     d3.selectAll("g#dotplot"+d).selectAll("g.title").select("text").attr("opacity",1);
+  d3.selectAll("g#dotplot"+d).selectAll("g.ciline").selectAll("line").attr("opacity",1);
+
 }
   
 };
