@@ -38,7 +38,7 @@ plot = function(data) {
   panelheight_bot = fullpanelheight_bot - margin_bot.top - margin_bot.bottom;
   svg = d3.select("div#chart").append("svg").attr("height", height).attr("width", width);
 
-  xlim = [[0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1], [0, 0.1]];
+  xlim = [[0, 0.5], [0, 0.5], [0, 0.5], [0, 0.5], [0, 0.5], [0, 0.5], [0, 0.5]];
   nxticks = [6, 6, 6, 6, 6, 6];
   xlab = ["Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology", "Etiology"];
   title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
@@ -89,8 +89,8 @@ lowlight_state = function(d, i) {
   return d3.select("text#state" + i).attr("fill", "black");
 };
 
-top_panel_var = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"];
-d3.json("data2.json", plot);
+top_panel_var = ["KEN_CXR_AGE_0","GAM_CXR_AGE_0","MAL_CXR_AGE_0","ZAM_CXR_AGE_0","SAF_CXR_AGE_0","THA_CXR_AGE_0","BAN_CXR_AGE_0"];
+d3.json("perchdata.json", plot);
 
 d3.select("#agep0").on("input", function() {
   if (combine) {
@@ -195,8 +195,10 @@ d3.select("#option2").on("change", function() {
 	combine= false;
   };
 });
-top_panel_var_age0 = ["01KEN0", "02GAM0", "03MAL0", "04ZAM0", "05SAF0", "06THA0","07BAN0"]
-top_panel_var_age1 = ["01KEN1", "02GAM1", "03MAL1", "04ZAM1", "05SAF1", "06THA1","07BAN1"]
+top_panel_var_age0 = ["KEN_CXR_AGE_0","GAM_CXR_AGE_0","MAL_CXR_AGE_0","ZAM_CXR_AGE_0","SAF_CXR_AGE_0","THA_CXR_AGE_0","BAN_CXR_AGE_0"];
+top_panel_var_age1 = ["KEN_CXR_AGE_1","GAM_CXR_AGE_1","MAL_CXR_AGE_1","ZAM_CXR_AGE_1","SAF_CXR_AGE_1","THA_CXR_AGE_1","BAN_CXR_AGE_1"];
+site = ["KEN","GAM","MAL","ZAM","SAF","THA","BAN"];
+
 update(30,"agep0");
 update(35,"agep1");
 update(50,"agep2");
@@ -219,10 +221,10 @@ selectUI.selectAll("option").data(d3.keys(statOptions)).enter().append("option")
 });
 
 
-var updatenot = false;
+var updatenot=false;
 
 function update(agep,id) {
-	d3.json("data2.json", function(data) {
+	d3.json("perchdata.json", function(data) {
 			n_pathogens = data.pathogen.length;
 			margin = margin_top;
 			xrange = [margin.left + margin.inner, margin.left + panelwidth_top - margin.inner];
@@ -232,21 +234,22 @@ function update(agep,id) {
 			} else {
 		    xrange_new = xrange;
 			}
-			xlim = [0, 0.1];
+			xlim = [0, 0.5];
 			xscale = d3.scale.linear();
 			xscale.domain(xlim).range(xrange);
 			xscale_new = d3.scale.linear();
 			xscale_new.domain(xlim).range(xrange_new);
 			j=id.substring(id.length,id.length-1);
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
-			xvar_age0 = top_panel_var_age0[j];
-			xvar_age1 = top_panel_var_age1[j];
-			x_age0 = data[xvar_age0];
-			x_age1 = data[xvar_age1];
+
+			xvar_site = site[j];
+			Wid = "W"+agep;
+			x_site = data[xvar_site];
+			x_W = x_site[Wid];
 
 			//points.duration(750).attr("fill", "#FF3");
-			points.duration(750).attr("cx", function(d,i) { return xscale_new((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
-			}).attr("r",function(d,i) { return 0.12*xscale((agep * x_age1[i] + (100-agep) * x_age0[i])/100);
+			points.duration(750).attr("cx", function(d,i) { return xscale_new((x_W.mean[i]));})
+			.attr("r",function(d,i) { return 100/xscale(x_W.sd[i]); 
 			});
 
 });
@@ -254,15 +257,23 @@ function update(agep,id) {
 			};
 
 
+var zoom = d3.behavior.zoom()
+    .scaleExtent([1, 10])
+    .on("zoom", zoomed);
+
+var container=d3.selectAll("g#dotplot0").selectAll("circle");	
+function zoomed() {
+  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
 function updateData() {
 	updatenot = true;
 
 	color = ["red","brown","yellow","green","Teal","blue","purple"];
-	d3.json("data2.json", function(data) {
+	d3.json("perchdata.json", function(data) {
 			n_pathogens = data.pathogen.length;
 			margin = margin_top;
 		    xrange = [margin.left + margin.inner, margin.left + panelwidth_top - margin.inner];
-			xlim = [0, 0.1];
+			xlim = [0, 0.5];
 			xscale = d3.scale.linear();
 			xscale.domain(xlim).range(xrange);
 			
@@ -278,11 +289,11 @@ function updateData() {
 				yaxis.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 				xaxis = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis").transition();
 				xaxis.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
+				points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
+				points.duration(1000).attr("fill", color[j]);
 				title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
 				title.select("text").duration(1000).style("fill", color[j]).style("cursor","pointer");
 				title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
-				points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
-				points.duration(1000).attr("fill", color[j]);
 				d3.selectAll("g#dotplot"+j).transition().duration(1000).delay(1000).attr("transform", "translate(" + (statenamewidth) + ",0) scale(1,1) rotate(0)");
 				//d3.selectAll("div#compinput").remove();
 			};
@@ -302,6 +313,8 @@ function updateData() {
 			d3.select("div#compinput6").selectAll("input").transition().duration(1000).delay(1000).style("left", "1200px").style("position","absolute").style("top","280px");
 			d3.select("div#compinput6").selectAll("text").transition().duration(1000).delay(1000).style("left", "1235px").style("position","absolute").style("top","285px");			
 			j=0;
+			d3.selectAll("g#dotplot"+j).call(zoom);
+			
 			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
 			title.select("text").duration(1000).style("fill", color[j]).style("cursor","pointer");
 			points = d3.selectAll("g#dotplot"+j).selectAll("circle").transition();
@@ -326,7 +339,7 @@ function updateData() {
 			//x y axis
 			nxticks = 6;
 			height = 530;
-			xticks= Array.apply(0, Array(nxticks)).map(function (x, y) { return (0.1*y/(nxticks-1)); });
+			xticks= Array.apply(0, Array(nxticks)).map(function (x, y) { return (0.5*y/(nxticks-1)); });
 			xline = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis line").transition().duration(1000).delay(2000).attr("x1", function(d,i){ return xscale_new(xticks[i])}).attr("x2", function(d,i){ return xscale_new(xticks[i])});
 			xtext = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis text").transition().duration(1000).delay(2000).attr("x", function(d,i){ 
 				if (i<6) {return xscale_new(xticks[i]);} 
@@ -337,14 +350,16 @@ function updateData() {
 
 			agep = [+document.getElementById("agep0").value,+document.getElementById("agep1").value,+document.getElementById("agep2").value,+document.getElementById("agep3").value,+document.getElementById("agep4").value,+document.getElementById("agep5").value,+document.getElementById("agep6").value]
 			for (k = 0; k < 7; k++) { 
-				points = d3.selectAll("g#dotplot"+k).selectAll("circle").moveToFront().transition();
-				xvar_age0 = top_panel_var_age0[k];
-				xvar_age1 = top_panel_var_age1[k];
-				x_age0 = data[xvar_age0];
-				x_age1 = data[xvar_age1];
-				points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((agep[k] * x_age1[i] + (100-agep[k]) * x_age0[i])/100);
-			}).attr("r",function(d,i) { return 0.12*xscale((agep[k] * x_age1[i] + (100-agep[k]) * x_age0[i])/100);
-			});};
+				points = d3.selectAll("g#dotplot"+k).selectAll("circle").transition();
+			xvar_site = site[k];
+			Wid = "W"+agep[k];
+			x_site = data[xvar_site];
+			x_W = x_site[Wid];
+			points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((x_W.mean[i]));})
+			.attr("r",function(d,i) { return 100/xscale(x_W.sd[i]);
+			});
+			
+			};
 
 })}
 highlight_ind = [true,true,true,true,true,true,true];
@@ -372,6 +387,5 @@ function removeA(arr) {
     return arr;
 }
 
-document.createElement("BUTTON");
 
 
