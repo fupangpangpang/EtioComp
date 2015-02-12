@@ -253,7 +253,7 @@ function update(agep,id) {
 
 			//points.duration(750).attr("fill", "#FF3");
 			points.duration(750).attr("cx", function(data1,index1) { return xscale_new((x_W.mean[index1]));})
-			.attr("r",function(data1,index1) { return 1/Math.pow(x_W.sd[index1],1/3);});
+			.attr("r",function(data1,index1) { return 2*Math.pow(x_W.mean[index1]/x_W.sd[index1],.75);});
 			ciline.duration(750).attr("x1", function(data2,index2) { return xscale_new((x_W.p025[index2]));})
 			.attr("x2",function(data2,index2) { return xscale_new(x_W.p975[index2]);});
 });
@@ -360,7 +360,7 @@ function updateData() {
 			x_site = data[xvar_site];
 			x_W = x_site[Wid];
 			points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((x_W.mean[i]));})
-			.attr("r",function(d,i) { return 1/Math.pow(x_W.sd[i],1/3);});
+			.attr("r",function(d,i) { return 2*Math.pow(x_W.mean[i]/x_W.sd[i],.75);});
 			ciline = d3.selectAll("g#dotplot"+k).selectAll("g.ciline").selectAll("line").transition();
 			ciline.duration(750).delay(2000).attr("x1", function(data2,index2) { return xscale_new((x_W.p025[index2]));})
 			.attr("x2",function(data2,index2) { return xscale_new(x_W.p975[index2]);});			

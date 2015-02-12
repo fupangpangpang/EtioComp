@@ -5,15 +5,23 @@ This visualization is designed to facilitate comparison of etiology distribution
 
 Ideas
 ---------
-1. To decide what to use to show precision of estimate
 3. To add one more characterisitics  - severity // 
 4. To change age slider to bigger slider with three slider for finer age stratification 
 7. To add aggregated plot for viruses//bacteria//other
 8. To give different reccolor for bacteria//viruses//fungi 
 9. To add exact number and CI to highlight box
+10. To add option to shorten the list of pathogens.
 
 Development LOG
 -----------
+
+2015.02.12
+
+1. I got an important idea from Scott, I can use t-statitics for size of bubble, which would be estimate/std, I believe it showed exactly how significant the estimate is. Also he mentioned that Bill clffton?? about his experiments on human understanding of area and radius. It seems like people can perceived neither of them, but something inbetween. So we decided to use .75 root of t-statistics. 
+2. It works perfectly. Now we have large fat bubble on RSV!!
+3. Another idea from Maria yesterady is to have options to shorten the list of pathogens. However I have to struggle again on which data structure I should use!!!
+ 
+
 
 2015.02.11
 
