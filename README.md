@@ -20,6 +20,7 @@ Development LOG
 1. I got an important idea from Scott, I can use t-statitics for size of bubble, which would be estimate/std, I believe it showed exactly how significant the estimate is. Also he mentioned that Bill clffton?? about his experiments on human understanding of area and radius. It seems like people can perceived neither of them, but something inbetween. So we decided to use .75 root of t-statistics. 
 2. It works perfectly. Now we have large fat bubble on RSV!!
 3. Another idea from Maria yesterady is to have options to shorten the list of pathogens. However I have to struggle again on which data structure I should use!!!
+4. Ideas from Dan: build something like [**this**](http://www.wunderground.com/cgi-bin/findweather/getForecast?query=39.367001,-76.671898&sp=KMDBALTI49&MR=1) as deep dive plot by putting age at x axis.
  
 
 
