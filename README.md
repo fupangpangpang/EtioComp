@@ -15,6 +15,12 @@ Ideas
 Development LOG
 -----------
 
+2015.02.12
+
+1. I got an important idea from Scott, I can use t-statitics for size of bubble, which would be estimate/std, I believe it showed exactly how significant the estimate is. Also he mentioned that Bill clffton?? about his experiments on human understanding of area and radius. It seems like people can perceived neither of them, but something inbetween. So we decided to use .75 root of t-statistics. 
+2. It works perfectly. Now we have large fat bubble on RSV. 
+
+
 2015.02.11
 
 1. I need bring up last question from yesterday to Scott later today
