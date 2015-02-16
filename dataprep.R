@@ -5,6 +5,7 @@ dir_list = c("01KEN_CXR_AGE_0","01KEN_CXR_AGE_1","02GAM_CXR_AGE_0","02GAM_CXR_AG
              "03MAL_CXR_AGE_0","03MAL_CXR_AGE_1","04ZAM_CXR_AGE_0","04ZAM_CXR_AGE_1",
              "05SAF_CXR_AGE_0","05SAF_CXR_AGE_1","06THA_CXR_AGE_0","06THA_CXR_AGE_1",
              "07BAN_CXR_AGE_0","07BAN_CXR_AGE_1")
+dir_list = c("01KEN_CXR_AGE_0")
 dir_list1 = substr(dir_list,3,15)
 dir_list2 = substr(dir_list,1,5)
 json.prep = list()
@@ -13,6 +14,7 @@ json.prep.raw = list()
 #### a function to match each model's result to the desired order:####
 j=1
 DIR_NPLCM = paste0("C:\\Users\\WFu\\Dropbox (PERCH)\\PQM EXPERIMENT DATASETS\\ARCHIVE\\PQM_RESULTS_20141122\\",dir_list2[j],"\\",dir_list[j])
+DIR_NPLCM = paste0("C:\Users\WFu\Dropbox (PERCH)\\PERCH Core\\Data Analysis\\PQ Analysis\\Meeting Materials\\2015 02 05\\02GAM\\02GAM_OTHER_COMBO_EXP")
 model_options  <- dget(paste(DIR_NPLCM,"model_options.txt",sep="/"))
 pathogen_list = c(model_options$pathogen_list,model_options$pathogen_SSonly_list)
 DIR_pathogen_displayorder_lookup <- "C:\\PQ_MODEL\\pathogen_displayorder_lookup.csv"
