@@ -271,7 +271,7 @@ function zoomed() {
 }
 function updateData() {
 	updatenot = true;
-
+	panelheight_top_new = panelheight_top+5*7*40
 	color = ['rgb(228,26,28)','rgb(55,126,184)','rgb(77,175,74)','rgb(152,78,163)','rgb(255,127,0)','rgb(255,255,51)','rgb(166,86,40)'];
 	d3.json("perchdata.json", function(data) {
 			n_pathogens = data.pathogen.length;
@@ -279,12 +279,17 @@ function updateData() {
 		    xrange = [margin.left + margin.inner, margin.left + panelwidth_top - margin.inner];
 			xlim = [0, 0.5];
 			xscale = d3.scale.linear();
+			
 			xscale.domain(xlim).range(xrange);
 			
 			xrange_new = [margin.left + margin.inner, margin.left + panelwidth_top*6.5 - margin.inner]
 			xscale_new = d3.scale.linear();
 			xscale_new.domain(xlim).range(xrange_new);
 			
+			ylim=[0.5, n_pathogens + 0.5];
+			yrange = [margin.top + panelheight_top_new - margin.inner, margin.top + margin.inner];
+			yscale.domain(ylim).range(yrange);
+
 			title_y = [35,65,95,125,155,185,215];
 			for (j = 1; j < 7; j++) { 
 				rect = d3.selectAll("g#dotplot"+j).selectAll("rect").transition();
@@ -339,7 +344,7 @@ function updateData() {
 			d3.selectAll("g#dotplot"+j).selectAll("g.title").attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g.dotplot svg").attr("width", panelwidth_top*8);
 			rect = d3.selectAll("g#dotplot"+j).selectAll("rect").transition();
-			rect.duration(1000).delay(2000).attr("width", panelwidth_top*6.5);
+			rect.duration(1000).delay(2000).attr("width", panelwidth_top*6.5).attr("fill","none");
 			//x y axis
 			nxticks = 6;
 			height = 530;
@@ -360,10 +365,15 @@ function updateData() {
 			x_site = data[xvar_site];
 			x_W = x_site[Wid];
 			points.duration(750).delay(2000).attr("cx", function(d,i) { return xscale_new((x_W.mean[i]));})
+			.attr("cy", function(d, i) {return yscale(data.rank[i])+5*k;})
 			.attr("r",function(d,i) { return 2*Math.pow(x_W.mean[i]/x_W.sd[i],.75);});
 			ciline = d3.selectAll("g#dotplot"+k).selectAll("g.ciline").selectAll("line").transition();
-			ciline.duration(750).delay(2000).attr("x1", function(data2,index2) { return xscale_new((x_W.p025[index2]));})
-			.attr("x2",function(data2,index2) { return xscale_new(x_W.p975[index2]);});			
+			ciline.duration(750).delay(2000).attr("x1", function(d,i) { return xscale_new((x_W.p025[i]));})
+			.attr("x2",function(d,i) { return xscale_new(x_W.p975[i]);})
+			.attr("y1", function(d,i) { return yscale(data.rank[i])+5*k;})
+			.attr("y2", function(d,i) { return yscale(data.rank[i])+5*k;})
+			.attr("stroke", color[k])
+			.attr("stroke-width", 2);			
 			};
 
 })}
