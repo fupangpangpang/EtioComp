@@ -330,7 +330,8 @@ function updateData() {
 			points.duration(1000).attr("fill", color[j]);
 			title = d3.selectAll("g#dotplot"+j).selectAll("g.title").transition();
 			title.duration(1000).delay(1000).attr("transform", "translate(950,"+ title_y[j] +") scale(1,1) rotate(0)");
-			
+			names = d3.selectAll("g#statenames").selectAll("text").transition();
+			names.duration(1000).delay(2000).attr("y", function(d, i) {return yscale(data.rank[i])+5*3;});
 			//highlight site
 			 title = ["01KEN", "02GAM", "03MAL", "04ZAM", "05SAF", "06THA","07BAN"];
 			
@@ -339,12 +340,18 @@ function updateData() {
 			};
 			//create button;
 
-			
+			axispos = {
+				xtitle: 5,
+				ytitle: 30,
+				xlabel: 5,
+				ylabel: 5
+				};
 			//rect.duration(1000).attr("transform", "translate(0,0) scale(0,1) rotate(0)");
 			d3.selectAll("g#dotplot"+j).selectAll("g.title").attr("transform", "translate(0,0) scale(0,1) rotate(0)");
-			d3.selectAll("g.dotplot svg").attr("width", panelwidth_top*8);
+			d3.selectAll("g.dotplot svg").attr("width", panelwidth_top*8).attr("height", panelheight_top_new*1.1);
+			d3.selectAll("div#chart svg").attr("width", panelwidth_top*9).attr("height", panelheight_top_new*1.5);
 			rect = d3.selectAll("g#dotplot"+j).selectAll("rect").transition();
-			rect.duration(1000).delay(2000).attr("width", panelwidth_top*6.5).attr("fill","none");
+			rect.duration(1000).delay(2000).attr("width", panelwidth_top*6.5).attr("height", panelheight_top_new).attr("fill","none");
 			//x y axis
 			nxticks = 6;
 			height = 530;
@@ -353,7 +360,7 @@ function updateData() {
 			xtext = d3.selectAll("g#dotplot"+j).selectAll("g.x.axis text").transition().duration(1000).delay(2000).attr("x", function(d,i){ 
 				if (i<6) {return xscale_new(xticks[i]);} 
 				else {return margin.left + panelwidth_top*7/2}
-				} );
+				} ).attr("y", margin.top + panelheight_top_new + axispos.xtitle);
 			yline = d3.selectAll("g#dotplot"+j).selectAll("g.y.axis line").transition().duration(1000).delay(2000).attr("x2", function(d,i){ return margin.left + panelwidth_top*6.5});	
 			//d3.selectAll("g.dotplot g.y.axis line").transition().delay(2000).attr("stroke", "#bbb")			
 
